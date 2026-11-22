@@ -25,12 +25,28 @@ export const BLOCKERS = [
   { x: 600, y: 330, w: 80, h: 56, kind: 'table' },
 ];
 
-// The four loot vitrines. Grab all four and the exit opens.
+// The six loot vitrines. Grab all six and the exit opens.
 export const LOOT = [
   { id: 'idol', name: 'Golden Idol', value: 2500, x: 300, y: 168, color: '#f5c542' },
+  { id: 'orb', name: 'Emerald Orb', value: 1600, x: 640, y: 168, color: '#2ee6a8' },
   { id: 'mask', name: 'Jade Mask', value: 1800, x: 980, y: 168, color: '#3fd68c' },
   { id: 'tiara', name: 'Ruby Tiara', value: 2200, x: 300, y: 566, color: '#ff5d73' },
+  { id: 'scepter', name: 'Diamond Scepter', value: 2800, x: 640, y: 566, color: '#c9f2ff' },
   { id: 'crown', name: 'Sapphire Crown', value: 3000, x: 980, y: 566, color: '#5da8ff' },
+];
+
+// Wall decor (non-blocking): framed paintings, potted palms, benches.
+export const PAINTINGS = [
+  { x: 130, y: 78, w: 86, h: 52, hue: '#7a4a6b' },
+  { x: 1064, y: 78, w: 86, h: 52, hue: '#3a6b7a' },
+  { x: 130, y: 640, w: 86, h: 52, hue: '#6b7a3a' },
+  { x: 1064, y: 640, w: 86, h: 52, hue: '#7a5a3a' },
+];
+export const PLANTS = [
+  { x: 66, y: 620 }, { x: 1214, y: 620 }, { x: 66, y: 108 }, { x: 1214, y: 108 },
+];
+export const BENCHES = [
+  { x: 240, y: 330, w: 90, h: 26 }, { x: 950, y: 330, w: 90, h: 26 },
 ];
 
 // Guards walk their waypoint loop and look where they walk. If they see the
@@ -50,6 +66,13 @@ export const GUARDS = [
     speed: 52, chaseSpeed: 102,
     coneRange: 225, coneHalfAngle: 0.62,
   },
+  {
+    name: 'Rook',
+    x: 1050, y: 250,
+    waypoints: [{ x: 1050, y: 250 }, { x: 1050, y: 520 }],
+    speed: 55, chaseSpeed: 106,
+    coneRange: 225, coneHalfAngle: 0.62,
+  },
 ];
 
 // CCTV cameras are bolted to the walls and sweep back and forth.
@@ -62,6 +85,11 @@ export const CAMERAS = [
   {
     name: 'CAM 02', x: 1228, y: 96,
     baseAngle: Math.PI - 0.785, sweep: 0.85, period: 6.4, phase: 1.7,
+    coneRange: 300, coneHalfAngle: 0.42,
+  },
+  {
+    name: 'CAM 03', x: 1228, y: 672,
+    baseAngle: Math.PI + 0.785, sweep: 0.85, period: 5.8, phase: 2.4,
     coneRange: 300, coneHalfAngle: 0.42,
   },
 ];

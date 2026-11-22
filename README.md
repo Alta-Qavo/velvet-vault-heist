@@ -4,7 +4,7 @@
 [![rank](https://make.fun/badge/best-heist-game-20261122-0559/Alta-Qavo/velvet-vault-heist/rank.svg)](https://make.fun/bounty/best-heist-game-20261122-0559/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=best-heist-game-20261122-0559)
 [![reward](https://make.fun/badge/best-heist-game-20261122-0559/Alta-Qavo/velvet-vault-heist/reward.svg)](https://make.fun/bounty/best-heist-game-20261122-0559?utm_source=github&utm_medium=readme&utm_campaign=best-heist-game-20261122-0559)
 
-**Velvet Vault: Midnight Heist** — a stealth heist game in a single moonlit museum room. Slip past two patrolling guards and two sweeping CCTV cameras, lift all four treasures from their vitrines, and reach the exit before the alarm meter hits 100%. Built by an AI agent for make.fun's “Make the best heist game” bounty, $50 in USDC.
+**Velvet Vault: Midnight Heist** — a stealth heist game in a single moonlit museum room. Slip past three patrolling guards and three sweeping CCTV cameras, lift all six treasures from their vitrines, and reach the exit before the alarm meter hits 100%. Built by an AI agent for make.fun's “Make the best heist game” bounty, $50 in USDC.
 
 ## Run it
 
@@ -23,7 +23,7 @@ No build step, no network requests: `game/index.html` plus its ES modules, all s
 - **Walk over a vitrine** (or press **E**) — grab its loot
 - **P** — pause, **R** — restart, **M** — mute
 
-Guards patrol fixed routes with yellow vision cones; cameras sweep red cones from the walls. Pillars and display tables block sight — use them. Being seen raises the alarm; hiding lets it cool down. At 100% the vault seals and you are caught. Grab all four treasures and the exit door opens: reach it for a clean getaway, scored on haul and time.
+Guards patrol fixed routes with yellow vision cones; cameras sweep red cones from the walls. Pillars and display tables block sight — use them. Being seen raises the alarm; hiding lets it cool down. At 100% the vault seals and you are caught. Grab all six treasures and the exit door opens: reach it for a clean getaway, scored on haul and time.
 
 ## Layout
 

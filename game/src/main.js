@@ -23,7 +23,7 @@ world.onPickup = (loot) => {
 };
 world.onExitOpen = () => {
   sfx.sfxExitOpen();
-  flashMessage(world, 'All four treasures lifted — the exit is open. RUN!');
+  flashMessage(world, 'All six treasures lifted — the exit is open. RUN!');
 };
 world.onSpotted = () => sfx.sfxSpotted();
 world.onCaught = () => sfx.sfxCaught();
@@ -68,8 +68,12 @@ input.onThrow = (x, y) => {
 attachInput(canvas, input, () => world.state);
 
 // Stage a screenshot pose when the URL asks for one, e.g. ?shot=play.
+// The play pose is frozen: the alarm and the chasing guard are staged
+// mid-drama, and the simulation would catch the thief before the shutter.
 const params = new URLSearchParams(window.location.search);
-applyShot(world, params.get('shot'));
+const shot = params.get('shot');
+applyShot(world, shot);
+const frozenPose = shot === 'play';
 
 // Small test hook for the maker's own play-tests: read the state, move the
 // thief, set the alarm. The game never calls it on its own.
@@ -86,7 +90,7 @@ let last = performance.now();
 function frame(now) {
   const dt = Math.min(0.05, (now - last) / 1000);
   last = now;
-  if (world.state === 'playing') updateWorld(world, input, dt);
+  if (world.state === 'playing' && !frozenPose) updateWorld(world, input, dt);
   sfx.updateAlarmLoop(world.state === 'playing' ? world.alarm : 0);
   render(ctx, world, input.mouse);
   requestAnimationFrame(frame);

@@ -2,7 +2,7 @@
 // frame: marble floor, gold trim, red carpet, glowing vitrines, vision
 // cones, the thief, the guards, the cameras and the HUD with its alarm meter.
 
-import { VIEW, HUD_H, ROOM, BLOCKERS, LOOT, EXIT, GUARDS, mulberry32 } from './config.js';
+import { VIEW, HUD_H, ROOM, BLOCKERS, LOOT, EXIT, GUARDS, PAINTINGS, PLANTS, BENCHES, mulberry32 } from './config.js';
 import { lootTotal, exitOpen } from './world.js';
 
 export const BTN_START = { x: 490, y: 470, w: 300, h: 62 };
@@ -41,7 +41,7 @@ function roundRect(ctx, x, y, w, h, r) {
   ctx.closePath();
 }
 
-function drawFloor(ctx) {
+function drawFloor(ctx, t) {
   ctx.fillStyle = '#141428';
   ctx.fillRect(0, 0, VIEW.w, VIEW.h);
   // Marble tiles.
@@ -66,6 +66,67 @@ function drawFloor(ctx) {
   ctx.strokeStyle = '#c9a227';
   ctx.lineWidth = 2;
   ctx.strokeRect(608, ROOM.y, 64, ROOM.h);
+  // Round rugs under the vitrines.
+  for (const l of LOOT) {
+    ctx.fillStyle = 'rgba(122,26,44,0.85)';
+    ctx.beginPath(); ctx.ellipse(l.x, l.y + 26, 52, 16, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = 'rgba(201,162,39,0.7)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.ellipse(l.x, l.y + 26, 52, 16, 0, 0, Math.PI * 2); ctx.stroke();
+  }
+  // Framed paintings on the walls.
+  for (const p of PAINTINGS) {
+    ctx.fillStyle = '#2a2118';
+    ctx.fillRect(p.x - 4, p.y - 4, p.w + 8, p.h + 8);
+    ctx.strokeStyle = '#c9a227';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(p.x - 4, p.y - 4, p.w + 8, p.h + 8);
+    ctx.fillStyle = p.hue;
+    ctx.fillRect(p.x, p.y, p.w, p.h);
+    ctx.strokeStyle = 'rgba(255,248,220,0.65)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(p.x + 8, p.y + p.h - 10); ctx.lineTo(p.x + p.w / 2, p.y + 12); ctx.lineTo(p.x + p.w - 8, p.y + p.h - 10); ctx.stroke();
+    ctx.beginPath(); ctx.arc(p.x + p.w - 16, p.y + 12, 7, 0, Math.PI * 2); ctx.stroke();
+  }
+  // Potted palms in the corners.
+  for (const pl of PLANTS) {
+    ctx.fillStyle = '#7a4a2a';
+    ctx.fillRect(pl.x - 9, pl.y - 6, 18, 14);
+    ctx.strokeStyle = '#2f7a3a';
+    ctx.lineWidth = 3;
+    for (let i = 0; i < 5; i++) {
+      const a = -Math.PI / 2 + (i - 2) * 0.45;
+      ctx.beginPath(); ctx.moveTo(pl.x, pl.y - 6); ctx.lineTo(pl.x + Math.cos(a) * 22, pl.y - 6 + Math.sin(a) * 22); ctx.stroke();
+    }
+  }
+  // Velvet benches.
+  for (const b of BENCHES) {
+    ctx.fillStyle = '#4a1220';
+    roundRect(ctx, b.x, b.y, b.w, b.h, 6); ctx.fill();
+    ctx.strokeStyle = '#c9a227';
+    ctx.lineWidth = 1.5;
+    roundRect(ctx, b.x, b.y, b.w, b.h, 6); ctx.stroke();
+  }
+  // Moonbeams slanting in from the high windows.
+  ctx.fillStyle = 'rgba(150,180,255,0.06)';
+  ctx.beginPath(); ctx.moveTo(240, ROOM.y); ctx.lineTo(340, ROOM.y); ctx.lineTo(520, ROOM.y + ROOM.h); ctx.lineTo(420, ROOM.y + ROOM.h); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(940, ROOM.y); ctx.lineTo(1040, ROOM.y); ctx.lineTo(860, ROOM.y + ROOM.h); ctx.lineTo(760, ROOM.y + ROOM.h); ctx.closePath(); ctx.fill();
+  // Chandelier glow over the display table.
+  const ch = ctx.createRadialGradient(640, 358, 10, 640, 358, 190);
+  ch.addColorStop(0, 'rgba(255,220,140,0.14)');
+  ch.addColorStop(1, 'rgba(255,220,140,0)');
+  ctx.fillStyle = ch;
+  ctx.beginPath(); ctx.arc(640, 358, 190, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#c9a227';
+  ctx.beginPath(); ctx.arc(640, 330, 5, 0, Math.PI * 2); ctx.fill();
+  // Dust motes drifting in the light.
+  for (let i = 0; i < 26; i++) {
+    const dx = (i * 97) % 1244, dy = (i * 173) % 636;
+    const mx = ROOM.x + ((dx + t * 6 * (1 + (i % 3))) % 1244);
+    const my = ROOM.y + ((dy + t * 3 * (1 + (i % 2))) % 636);
+    ctx.fillStyle = `rgba(220,225,255,${0.10 + (i % 3) * 0.05})`;
+    ctx.fillRect(mx, my, 2, 2);
+  }
   // Gold-trimmed walls.
   ctx.strokeStyle = '#c9a227';
   ctx.lineWidth = 5;
@@ -89,6 +150,18 @@ function drawLootShape(ctx, loot, t) {
   if (loot.id === 'idol') {
     ctx.beginPath(); ctx.moveTo(0, -16); ctx.lineTo(10, 6); ctx.lineTo(5, 14); ctx.lineTo(-5, 14); ctx.lineTo(-10, 6); ctx.closePath(); ctx.fill(); ctx.stroke();
     ctx.beginPath(); ctx.arc(0, -20, 6, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+  } else if (loot.id === 'orb') {
+    ctx.beginPath(); ctx.arc(0, 0, 14, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.75)';
+    ctx.beginPath(); ctx.arc(-5, -5, 4, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#c9a227';
+    ctx.fillRect(-14, 12, 28, 3);
+  } else if (loot.id === 'scepter') {
+    ctx.strokeStyle = '#fff8dc';
+    ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(0, 14); ctx.lineTo(0, -8); ctx.stroke();
+    ctx.fillStyle = color;
+    ctx.beginPath(); ctx.moveTo(0, -20); ctx.lineTo(8, -10); ctx.lineTo(0, 0); ctx.lineTo(-8, -10); ctx.closePath(); ctx.fill(); ctx.stroke();
   } else if (loot.id === 'mask') {
     ctx.beginPath(); ctx.ellipse(0, 0, 13, 16, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
     ctx.fillStyle = '#0c2b1a';
@@ -158,6 +231,9 @@ function drawGuard(ctx, g, def, t) {
   ctx.fillRect(g.x - 10, g.y - 6, 20, 4);
   ctx.fillStyle = '#d8c26a';
   ctx.fillRect(g.x - 7, g.y + 4, 14, 3);
+  // Gold epaulettes.
+  ctx.fillStyle = '#d8c26a';
+  ctx.beginPath(); ctx.arc(g.x - 11, g.y - 6, 3, 0, Math.PI * 2); ctx.arc(g.x + 11, g.y - 6, 3, 0, Math.PI * 2); ctx.fill();
   // Facing tick.
   ctx.strokeStyle = '#fff';
   ctx.lineWidth = 2;
@@ -210,6 +286,13 @@ function drawThief(ctx, w, t) {
   ctx.strokeStyle = '#b06fd6';
   ctx.lineWidth = 4;
   ctx.beginPath(); ctx.arc(0, 1, 9, 0.3, Math.PI - 0.3); ctx.stroke();
+  // Gold belt and a dagger glint at the hip.
+  ctx.strokeStyle = '#d8c26a';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.arc(0, 2, 10, 0.4, Math.PI - 0.4); ctx.stroke();
+  ctx.strokeStyle = '#e8f2ff';
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(11, 8); ctx.lineTo(16, 12); ctx.stroke();
   // Masked eyes.
   ctx.fillStyle = '#ffe9a8';
   const ex = Math.cos(th.dir) * 4, ey = Math.sin(th.dir) * 4;
@@ -258,17 +341,25 @@ function drawHud(ctx, w) {
   ctx.font = '15px Georgia';
   ctx.textAlign = 'left';
   const taken = w.lootTaken.size;
-  ctx.fillText(`LOOT  ${taken} / ${LOOT.length}`, 400, 36);
+  ctx.fillText(`LOOT  ${taken} / ${LOOT.length}`, 380, 36);
   for (let i = 0; i < LOOT.length; i++) {
     ctx.fillStyle = w.lootTaken.has(LOOT[i].id) ? LOOT[i].color : '#33334d';
-    ctx.beginPath(); ctx.arc(500 + i * 22, 30, 6, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(470 + i * 18, 30, 6, 0, Math.PI * 2); ctx.fill();
     ctx.strokeStyle = '#c9a227'; ctx.lineWidth = 1; ctx.stroke();
   }
   ctx.fillStyle = '#e8e8f2';
-  ctx.fillText(`$${lootTotal(w).toLocaleString()}`, 600, 36);
+  ctx.fillText(`$${lootTotal(w).toLocaleString()}`, 590, 36);
   ctx.fillStyle = '#8a8aa8';
   ctx.font = '13px Georgia';
   ctx.fillText(`coins ${w.coinsLeft} · ${Math.floor(w.time / 60)}:${String(Math.floor(w.time % 60)).padStart(2, '0')}`, 700, 36);
+  // SPOTTED! flashes while any guard or camera has eyes on the thief.
+  const spotted = w.state === 'playing' && (w.guards.some((g) => g.seen) || w.cameras.some((c) => c.seen));
+  if (spotted && Math.sin(w.time * 12) > -0.2) {
+    ctx.fillStyle = '#ff4d4d';
+    ctx.font = 'bold 20px Georgia';
+    ctx.textAlign = 'center';
+    ctx.fillText('SPOTTED!', 640, 122);
+  }
 
   // Alarm meter.
   const ax = 950, ay = 16, aw = 250, ah = 26;
@@ -303,7 +394,7 @@ function drawVeil(ctx) {
 
 export function render(ctx, w, mouse) {
   const t = w.time;
-  drawFloor(ctx);
+  drawFloor(ctx, t);
   drawExit(ctx, w, t);
   for (const b of BLOCKERS) {
     ctx.fillStyle = b.kind === 'pillar' ? '#2e2e4a' : '#33291a';
@@ -361,7 +452,7 @@ export function render(ctx, w, mouse) {
     ctx.fillText('a midnight heist', 640, 232);
     ctx.fillStyle = '#cfd6ff';
     ctx.font = '18px Georgia';
-    ctx.fillText('Slip through the museum, lift all four treasures, and reach the exit', 640, 300);
+    ctx.fillText('Slip through the museum, lift all six treasures, and reach the exit', 640, 300);
     ctx.fillText('before the guards, the cameras and the alarm catch you.', 640, 328);
     ctx.fillStyle = '#8a8aa8';
     ctx.font = '16px Georgia';
@@ -371,7 +462,7 @@ export function render(ctx, w, mouse) {
     drawButton(ctx, BTN_START, 'START THE HEIST', hot);
     ctx.fillStyle = '#8a8aa8';
     ctx.font = '14px Georgia';
-    ctx.fillText('one room · two guards · two cameras · four treasures · one way out', 640, 580);
+    ctx.fillText('one room · three guards · three cameras · six treasures · one way out', 640, 580);
   } else if (w.state === 'paused') {
     drawVeil(ctx);
     ctx.fillStyle = '#f5d76e';
