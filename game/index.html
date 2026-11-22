@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Velvet Vault — Midnight Heist</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #0a0a14; height: 100%; overflow: hidden; }
+  body { display: flex; align-items: center; justify-content: center; font-family: Georgia, 'Times New Roman', serif; }
+  #wrap { position: relative; width: min(1280px, 100vw); aspect-ratio: 16 / 9; }
+  canvas { display: block; width: 100%; height: 100%; background: #101024; cursor: crosshair; }
+  #hint {
+    position: absolute; left: 0; right: 0; bottom: -26px; text-align: center;
+    color: #8a8aa8; font-size: 12px; font-family: system-ui, sans-serif; letter-spacing: .04em;
+  }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="game" width="1280" height="720"></canvas>
+  <div id="hint">WASD / arrows to move &middot; Shift to sneak &middot; click to toss a coin &middot; E to grab loot &middot; R to restart &middot; M to mute</div>
+</div>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
