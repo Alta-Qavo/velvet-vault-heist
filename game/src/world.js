@@ -166,6 +166,7 @@ function updateGuard(w, g, def, dt) {
     if (w.state === 'playing' && dist(g.x, g.y, t.x, t.y) < 26) {
       w.state = 'caught';
       w.caughtReason = `${g.name} grabbed you in the dark.`;
+      if (w.onCaught) w.onCaught();
     }
   } else if (g.mode === 'investigate' && g.target) {
     const a = angleTo(g.x, g.y, g.target.x, g.target.y);

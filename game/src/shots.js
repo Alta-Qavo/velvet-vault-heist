@@ -23,7 +23,7 @@ export function applyShot(w, shot) {
     w.thief.x = 560; w.thief.y = 480; w.thief.dir = -Math.PI / 2;
     w.lootTaken.add('idol');
     w.score = 2500;
-    w.alarm = 42;
+    w.alarm = 55;
     w.time = 47;
     setGuard(w, 0, 470, 300, -0.5);
     setGuard(w, 1, 820, 430, Math.PI + 0.4);

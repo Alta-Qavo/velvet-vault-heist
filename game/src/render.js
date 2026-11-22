@@ -175,7 +175,7 @@ function drawGuard(ctx, g, def, t) {
 }
 
 function drawCamera(ctx, cam) {
-  cone(ctx, cam.x, cam.y, cam.angle, cam.coneRange, cam.coneHalfAngle, 'rgba(255,80,80,A)', cam.seen ? 0.42 : 0.2);
+  cone(ctx, cam.x, cam.y, cam.angle, cam.coneRange, cam.coneHalfAngle, 'rgba(255,80,80,A)', cam.seen ? 0.5 : 0.3);
   // Wall mount + dome.
   ctx.fillStyle = '#3c3c55';
   ctx.fillRect(cam.x - 16, cam.y - 8, 32, 10);
@@ -285,10 +285,6 @@ function drawHud(ctx, w) {
   ctx.font = 'bold 13px Georgia';
   ctx.textAlign = 'center';
   ctx.fillText(`ALARM ${Math.round(w.alarm)}%`, ax + aw / 2, ay + 18);
-  ctx.fillStyle = '#8a8aa8';
-  ctx.font = '12px Georgia';
-  ctx.textAlign = 'left';
-  ctx.fillText('stay out of the cones', ax, ay + 40);
 }
 
 function drawButton(ctx, btn, label, hot) {

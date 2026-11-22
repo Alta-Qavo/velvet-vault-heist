@@ -66,7 +66,7 @@ export const CAMERAS = [
   },
 ];
 
-export const EXIT = { x: 596, y: 668, w: 88, h: 34 };
+export const EXIT = { x: 565, y: 668, w: 150, h: 34 };
 
 export const ALARM = {
   guardPerSec: 58,
